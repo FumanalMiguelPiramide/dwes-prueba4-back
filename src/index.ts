@@ -7,17 +7,18 @@ import * as fs from "fs";
 
 import routerUsuarios from "./usuarios/infrastructure/rest/usuarios.rest";
 import routerTransacciones from "./transacciones/infrastructure/rest/transacciones.rest";
+import { testConnection } from "./context/postgres.connector";
 
 dotenv.config();
 const port = process.env.PORT;
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["*"];
 const options: cors.CorsOptions = {
   origin: allowedOrigins,
 };
 const app = express();
 app.use(express.json());
 app.use(cors(options));
-
+testConnection()
 //routers
 const api = "/api";
 app.use(api + `/usuarios`, routerUsuarios);

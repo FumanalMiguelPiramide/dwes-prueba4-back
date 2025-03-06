@@ -11,8 +11,18 @@ const pool = new Pool({
   max: 1000,
   connectionString: `postgres://${dbUser}:${dbPassword}@${dbHost}:5432/${dbName}`,
   idleTimeoutMillis: 30000,
+  ssl: {
+      rejectUnauthorized: false  // Para deshabilitar la validación de certificados (esto es útil para desarrollo, no se recomienda en producción)
+  }
 });
-
+const testConnection = async () => {
+  try {
+      const res = await executeQuery('SELECT NOW()');
+      console.log('Conexión exitosa:', res);
+  } catch (err) {
+      console.error('Error de conexión:', err);
+  }
+};
 const executeQuery = async (sql: any, data?: any[]): Promise<any> => {
   const client = await pool.connect();
   try {
@@ -25,5 +35,5 @@ const executeQuery = async (sql: any, data?: any[]): Promise<any> => {
     return null;
   }
 };
-
+export {testConnection}
 export default executeQuery;
